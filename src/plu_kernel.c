@@ -18,7 +18,7 @@ void pre_symbolic_numeric_pipe(const int j, const int kk, int size, \
     int * flag, int * stack, int * appos, int * pruned, int * updated, \
     int * pinv, int * pend, double * work_buff, \
     int * llen, int ** lrows, double ** lvals, int Ajnnz, int * Ajrows, double * Ajvals, \
-    int * last_busy, int pipe_start_id, int * pipe_list, int * col_idx, int * statuses, int * busy);
+    int * last_busy, int pipe_start_id, int * pipe_list, int * col_idx, int * statuses);
 int post_symbolic_numeric_pipe(const int j, int size, \
     int * flag, int * stack, int * appos, int * ljlen, int * ljrows, int * pruned, int * updated, \
     int * pinv, int * pend, double * work_buff, \
@@ -179,16 +179,16 @@ void plu_kernel(LU * lu)
         int * col_idx = et->_col_pos;
         int ** pupdated;
         int ** ppruned;
-        int ** pbusy;
+        //int ** pbusy;
         pupdated = (int **)malloc(num_threads*sizeof(int *));
         ppruned = (int **)malloc(num_threads*sizeof(int *));
-        pbusy = (int **)malloc(num_threads*sizeof(int *));
+        //pbusy = (int **)malloc(num_threads*sizeof(int *));
         for (i = 0; i < num_threads; i++) {
             pupdated[i] = (int *)malloc(size*sizeof(int));
             memset(pupdated[i], -1, size*sizeof(int));
             ppruned[i] = (int *)malloc(size*sizeof(int));
-            pbusy[i] = (int *)malloc(size*sizeof(int));
-            memset(pbusy[i], -1, size*sizeof(int));
+            //pbusy[i] = (int *)malloc(size*sizeof(int));
+            //memset(pbusy[i], -1, size*sizeof(int));
         }
         
         #pragma omp parallel num_threads(num_threads) private(i) shared(statuses)
@@ -206,7 +206,7 @@ void plu_kernel(LU * lu)
             int * llen = L->_nz_count;
             int ** lrows = L->_rows;
             double ** lvals = L->_values;
-            int * busy = pbusy[tid];
+            //int * busy = pbusy[tid];
             int * lrows_st;
             int Ajnzcount;
             int * Ajrows;
@@ -220,7 +220,7 @@ void plu_kernel(LU * lu)
                 //printf("Thread[%d] col[%d] start:\n", tid, j);
                 
                 pre_symbolic_numeric_pipe(j, kk, size, flag, stack, appos, pruned, updated, pivot_inv, pend, work_buffer, \
-                    llen, lrows, lvals, Ajnzcount, Ajrows, Ajvalues, &last_busy, pipe_start_id, pipe_lists, col_idx, statuses, busy);
+                    llen, lrows, lvals, Ajnzcount, Ajrows, Ajvalues, &last_busy, pipe_start_id, pipe_lists, col_idx, statuses);
 
                 top = post_symbolic_numeric_pipe(j, size, flag, stack, appos, &ljlen, ljrows, pruned, updated, pivot_inv, pend, work_buffer, \
                     llen, lrows, lvals, Ajnzcount, Ajrows);
@@ -245,11 +245,11 @@ void plu_kernel(LU * lu)
         for (i = 0; i < num_threads; i++) {
             free(ppruned[i]);
             free(pupdated[i]);
-            free(pbusy[i]);
+            //free(pbusy[i]);
         }
         free(ppruned);
         free(pupdated);
-        free(pbusy);
+        //free(pbusy);
     }
     //fclose(debug_file);
     //debug_file = NULL;
@@ -532,7 +532,7 @@ void pre_symbolic_numeric_pipe(const int j, const int kk, int size, \
     int * flag, int * stack, int * appos, int * pruned, int * updated, \
     int * pinv, int * pend, double * work_buff, \
     int * llen, int ** lrows, double ** lvals, int Ajnnz, int * Ajrows, double * Ajvals, \
-    int * last_busy, int pipe_start_id, int * pipe_list, int * col_idx, int * statuses, int * busy)
+    int * last_busy, int pipe_start_id, int * pipe_list, int * col_idx, int * statuses)
 {
     int i, k, q, row, tp, irow, irow_new, lrow;
     int top, pos, head;
