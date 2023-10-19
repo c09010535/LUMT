@@ -1,6 +1,6 @@
 
 The size of the matrix and the number of non-zero entries should be specified at the first line of the input file.
-Note, the first number is the matrix size, and the second number is the numbr of the non-zero entries.
+Note, the first number is the matrix size, and the second number is the number of the non-zero entries.
 
 The non-zero entries of the matrix are listed below the first line. The sparse matrix is expressed by coordinate list,
 namely, COO is used to describe the input matrix. For each row, the three numbers are row index, column index and the
