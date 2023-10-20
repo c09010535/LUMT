@@ -5,7 +5,7 @@ Note, the first number is the matrix size, and the second number is the number o
 The non-zero entries of the matrix are listed below the first line. The sparse matrix is expressed by coordinate list,
 namely, COO is used to describe the input matrix. For each row, the three numbers are row index, column index and the
 value of a non-zero entry. It is noted that the row indexes and the column indexes can be unordered. In addition, the
-row indexes and the column indexes should be 0,1,...,n, where n is the matrix size.
+row indexes and the column indexes should be 0,1,...,n-1, where n is the matrix size.
 
 The last part of the input file specifies the right hand side (RHS) of the linear system. Please note, the RHS should
 be arranged in order.
