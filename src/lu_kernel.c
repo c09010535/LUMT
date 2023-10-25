@@ -327,6 +327,7 @@ LU * lu_free(LU * lu)
     free(lu->_amdp);     lu->_amdp = NULL;
     lu->_et = freeEtree(lu->_et);
     lu->_mat_size = 0;
+    free(lu);
     return NULL;
 }
 
@@ -516,7 +517,7 @@ void lu_run(LU * lu)
     int * amdp = lu->_amdp;
 
     if (lu->_rmvzero) {
-        printf("Start removing zero emtries in the diagonal.\n");
+        printf("Start removing zero entries in the diagonal.\n");
         rmv_zero_entry_diag_mc64(a, b);
         printf("Diagonal is nonzero.\n");
     }
